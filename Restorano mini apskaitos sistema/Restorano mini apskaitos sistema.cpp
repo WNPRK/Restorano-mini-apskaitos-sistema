@@ -112,7 +112,7 @@ void printCheck(menuItemType menuList[], const vector<int>& selectedItems, const
         out << "\n-----------------------------------------------" << endl;
         out << left << setw(40) << "Mokesčiai (21%)" << tax << "€" << endl;
         out << left << setw(40) << "Galutinė suma" << total << "€" << endl;
-        out << "Ačiū, kad lankėtės!" << endl;
+        out << "Geros dienos!" << endl;
         };
 
     printFormat(cout);    // Išveda į ekraną
