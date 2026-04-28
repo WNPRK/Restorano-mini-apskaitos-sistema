@@ -121,3 +121,4 @@ void printCheck(menuItemType menuList[], const vector<int>& selectedItems, const
     outFile.close();
     cout << "\nSąskaita sėkmingai išsaugota receipt.txt faile." << endl;
 }
+//Programos pabaiga
