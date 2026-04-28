@@ -74,7 +74,7 @@ void getData(menuItemType menuList[], int& count) {
 
 // Funkcija: parodo meniu vartotojui
 void showMenu(menuItemType menuList[], int count) {
-    cout << "--- Sveiki atvykę į restoraną „Gera Nuotaika“ ---" << endl;
+    cout << "--- Sveiki atvykę į restoraną „Skanūs Pusryčiai“ ---" << endl;
     cout << fixed << setprecision(2);
     for (int i = 0; i < count; i++) {
         // Pakeičiame apatinius brūkšnius tarpais gražesniam vaizdui
