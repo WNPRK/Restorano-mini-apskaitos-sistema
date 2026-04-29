@@ -6,62 +6,68 @@
 
 using namespace std;
 
-// Struktūra patiekalui aprašyti
+// Struktura patiekalui aprasyti
 struct menuItemType {
     string menuItem;
     double menuPrice;
 };
 
-// Funkcijų prototipai
+// Funkciju prototipai
 void getData(menuItemType menuList[], int& count);
 void showMenu(menuItemType menuList[], int count);
 void printCheck(menuItemType menuList[], const vector<int>& selectedItems, const vector<int>& quantities);
 
 int main() {
-    menuItemType menuList[50]; // Masyvas meniu saugojimui
+    menuItemType menuList[50];
     int menuSize = 0;
-    vector<int> selectedItems; // Vartotojo pasirinktų patiekalų indeksai
-    vector<int> quantities;    // Kiekvieno pasirinkto patiekalo kiekis
+    vector<int> selectedItems;
+    vector<int> quantities;
 
     // 1. Nuskaitome duomenis
     getData(menuList, menuSize);
 
+    if (menuSize == 0) {
+        cout << "Klaida: Meniu tuscias arba failas nerastas!" << endl;
+        return 1;
+    }
+
     // 2. Rodome meniu
     showMenu(menuList, menuSize);
 
-    // 3. Užsakymo procesas
+    // 3. Uzsakymo procesas
     int choice, qty;
-    cout << "\nĮveskite patiekalo numerį (įveskite 0, jei norite baigti): " << endl;
+    cout << "\nIveskite patiekalo numeri (iveskite 0, jei norite baigti): " << endl;
 
     while (cin >> choice && choice != 0) {
         if (choice > 0 && choice <= menuSize) {
-            cout << "Kiek porcijų pageidaujate? ";
+            cout << "Kiek porciju pageidaujate? ";
             cin >> qty;
             selectedItems.push_back(choice - 1);
             quantities.push_back(qty);
-            cout << "Pridėta! Įveskite kitą numerį arba 0 baigti: ";
+            cout << "Prideta! Iveskite kita numeri arba 0 baigti: ";
         }
         else {
-            cout << "Neteisingas pasirinkimas, bandykite dar kartą: ";
+            cout << "Neteisingas pasirinkimas, bandykite dar karta: ";
         }
     }
 
-    // 4. Sąskaitos generavimas
+    // 4. Saskaitos generavimas
     if (!selectedItems.empty()) {
         printCheck(menuList, selectedItems, quantities);
     }
     else {
-        cout << "Užsakymas tuščias." << endl;
+        cout << "Uzsakymas tuscias." << endl;
     }
 
     return 0;
 }
 
-// Funkcija: nuskaito meniu iš failo
+// Funkcija: nuskaito meniu is failo
 void getData(menuItemType menuList[], int& count) {
     ifstream file("menu.txt");
     if (!file) {
-        cerr << "Klaida: Nepavyko rasti menu.txt failo!" << endl;
+        // Jei vis tiek neras, pabandyk cia irasyti pilna kelia, pvz:
+        // ifstream file("C:\\Users\\Vardas\\source\\repos\\Projektas\\menu.txt");
         return;
     }
 
@@ -74,25 +80,24 @@ void getData(menuItemType menuList[], int& count) {
 
 // Funkcija: parodo meniu vartotojui
 void showMenu(menuItemType menuList[], int count) {
-    cout << "--- Sveiki atvykę į restoraną „Skanūs Pusryčiai“ ---" << endl;
+    cout << "--- Sveiki atvyke i restorana ---" << endl;
     cout << fixed << setprecision(2);
     for (int i = 0; i < count; i++) {
-        // Pakeičiame apatinius brūkšnius tarpais gražesniam vaizdui
         string name = menuList[i].menuItem;
         for (int j = 0; j < name.length(); j++) if (name[j] == '_') name[j] = ' ';
 
-        cout << i + 1 << ". " << left << setw(40) << name << menuList[i].menuPrice << " €" << endl;
+        cout << i + 1 << ". " << left << setw(40) << name << menuList[i].menuPrice << " EUR" << endl;
     }
     cout << "-----------------------------------------------" << endl;
 }
 
-// Funkcija: spausdina sąskaitą ir išsaugo į failą
+// Funkcija: spausdina saskaita ir issaugo i faila
 void printCheck(menuItemType menuList[], const vector<int>& selectedItems, const vector<int>& quantities) {
     ofstream outFile("receipt.txt");
     double subtotal = 0;
 
     auto printFormat = [&](ostream& out) {
-        out << "\n--- Jūsų sąskaita ---" << endl;
+        out << "\n--- Jusu saskaita ---" << endl;
         for (size_t i = 0; i < selectedItems.size(); i++) {
             int idx = selectedItems[i];
             string name = menuList[idx].menuItem;
@@ -102,7 +107,7 @@ void printCheck(menuItemType menuList[], const vector<int>& selectedItems, const
             subtotal += itemTotal;
 
             out << quantities[i] << " x " << left << setw(35) << name
-                << menuList[idx].menuPrice * quantities[i] << "€" << endl;
+                << itemTotal << " EUR" << endl;
         }
 
         double tax = subtotal * 0.21;
@@ -110,15 +115,15 @@ void printCheck(menuItemType menuList[], const vector<int>& selectedItems, const
 
         out << fixed << setprecision(2);
         out << "\n-----------------------------------------------" << endl;
-        out << left << setw(40) << "Mokesčiai (21%)" << tax << "€" << endl;
-        out << left << setw(40) << "Galutinė suma" << total << "€" << endl;
+        out << left << setw(40) << "Mokesciai (21%)" << tax << " EUR" << endl;
+        out << left << setw(40) << "Galutine suma" << total << " EUR" << endl;
         out << "Geros dienos!" << endl;
         };
 
-    printFormat(cout);    // Išveda į ekraną
-    printFormat(outFile); // Įrašo į failą
+    printFormat(cout);
+    printFormat(outFile);
 
     outFile.close();
-    cout << "\nSąskaita sėkmingai išsaugota receipt.txt faile." << endl;
+    cout << "\nSaskaita sekmingai issaugota receipt.txt faile." << endl;
 }
 //Programos pabaiga
